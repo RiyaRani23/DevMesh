@@ -1,0 +1,24 @@
+{
+  "name": "devmesh",
+  "version": "1.0.0",
+  "description": "DEVMESH for devs",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RiyaRani23/DevMesh.git"
+  },
+  "author": "Riya Rani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RiyaRani23/DevMesh/issues"
+  },
+  "homepage": "https://github.com/RiyaRani23/DevMesh#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.2"
+  }
+}
