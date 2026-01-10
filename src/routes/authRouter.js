@@ -12,7 +12,13 @@ authRouter.post("/signup", async (req, res) => {
     // Validate input data
      validateSignUpData(req);
 
-     const { firstName, lastName, emailId, password } = req.body;
+     const { firstName, lastName, emailId, password, gender, about, photoUrl, age, skills }  = req.body;
+     
+    // Check if user already exists
+    const existingUser = await User.findOne({ emailId: emailId.toLowerCase().trim() });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists please log in to continue" });
+    }
 
     // Encrpt the password
     const passwordHash = await bcrypt.hash(password, 10);
@@ -23,6 +29,11 @@ authRouter.post("/signup", async (req, res) => {
         lastName,
         emailId,
         password: passwordHash,
+        gender,
+        about,
+      ...(photoUrl && { photoUrl }),
+      ...(age && { age }),
+      ...(skills && skills.length > 0 && { skills }),
       });
 
        await user.save();
@@ -46,7 +57,20 @@ authRouter.post("/login", async (req, res) => {
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if(isPasswordValid){
-        res.send("Login Successfully");
+        // Generate token
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "5d" });
+
+      const isProd = process.env.NODE_ENV === "production";
+      
+      // Add the token to Cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: isProd ? "None" : "Lax",
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      });
+
+      res.send(user);
       }
       else{
         throw new Error ("Inavalid credentials");
@@ -56,3 +80,12 @@ authRouter.post("/login", async (req, res) => {
        res.status(400).send("Error creating user:" + err.message);
    }
 });
+
+authRouter.post("logout", async(req, res) => {
+   res.cookie("token", null, {
+    expires: new Date(Data.now()),
+   })
+   res.send("Logout Successfully!!");
+})
+
+module.export = authRouter;
