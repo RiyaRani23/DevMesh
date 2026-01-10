@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 
+const authRouter = express.Router();
+
 authRouter.post("/signup", async (req, res) => {
    try{
     // Validate input data

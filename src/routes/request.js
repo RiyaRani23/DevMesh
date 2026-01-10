@@ -3,7 +3,6 @@ const requestRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-const { userAuth } = require("../middlewares/auth");
 
 // Send Connection Request Route - to express interest or ignore a user
 requestRouter.post("/request/send/:status/:toUserId", userAuth, async(req, res) => {
