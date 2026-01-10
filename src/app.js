@@ -3,7 +3,8 @@ const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
 const{ validateSignUpData } = require("./utils/validation");
-const becrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 
