@@ -110,4 +110,4 @@ authRouter.post("/forgotPassword", async (req, res) => {
   }
 });
 
-module.export = authRouter;
+module.exports = authRouter;
