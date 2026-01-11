@@ -50,7 +50,7 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async(req, res) 
 
       res.json({
         message:
-          req.user.firstName + " is " + status + " in " + toUser.firstName,
+          req.user.firstName + status + toUser.firstName,
         data,
       });
   }

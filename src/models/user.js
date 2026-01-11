@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 const validator = require('validator'); 
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 
+// Define the User schema
 const userSchema = new mongoose.Schema({ 
     firstName: {
         type: String,
@@ -19,9 +24,9 @@ const userSchema = new mongoose.Schema({
         trim: true,
         validate(value) {
             if(!validator.isEmail(value)) {
-                throw new Error("Invalid email address");
+                throw new Error("Invalid email address" + value);
             }
-        }
+        },
     },
     password: {
         type: String,
@@ -38,11 +43,15 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        validate(value) {
-            if(!["Male", "Female", "Other"].includes(value)) {
-                throw new Error("Gender must be 'Male', 'Female', or 'Other'"); 
-            }
+        enum: {
+        values: ["male", "female", "other"],
+        message: `{VALUE} is not a valid gender type`,
         },
+        // validate(value) {
+        //     if(!["Male", "Female", "Other"].includes(value)) {
+        //         throw new Error("Gender must be 'Male', 'Female', or 'Other'"); 
+        //     }
+        // },
 
     },
     photoUrl: {
@@ -61,11 +70,36 @@ const userSchema = new mongoose.Schema({
     },
 
     skills: {
-        type: [String]
+        type: [String],
+        default: [],
     },       
 }, 
 {
     timestamps: true
 });
+
+// Instance method to generate JWT token ( do not use arrow function here)
+userSchema.methods.getJWT = async function () {
+  const user = this;
+
+  const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+
+  return token;
+};
+
+// Instance method to validate password
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
+  const user = this;
+  const passwordHash = user.password;
+
+  const isPasswordValid = await bcrypt.compare(
+    passwordInputByUser,
+    passwordHash
+  );
+
+  return isPasswordValid;
+};
 
 module.exports = mongoose.model('User', userSchema);
