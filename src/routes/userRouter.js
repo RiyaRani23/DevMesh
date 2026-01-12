@@ -2,6 +2,7 @@ const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const userRouter = express.Router();
 const ConnectionRequest = require("../models/connectionRequest");
+const User = require("../models/user");
 
 // Define safe user data fields to be returned
 const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills";
@@ -51,6 +52,53 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
     res.json({ data });
   } catch (err) {
     res.status(400).send({ message: err.message });
+  }
+});
+
+/// Get user feed excluding users with pending/accepted connection requests
+userRouter.get("/feed", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    let limit = parseInt(req.query.limit) || 10; // Number of users per page
+    limit = limit > 50 ? 50 : limit; // Maximum limit of users per page
+    const skip = (page - 1) * limit; // Number of users to skip
+
+    // Fetch all connection requests involving the logged-in user
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+    }).select("fromUserId  toUserId");
+
+    // Create a set of user IDs to hide from the feed
+    const hideUsersFromFeed = new Set();
+    connectionRequests.forEach((req) => {
+      hideUsersFromFeed.add(req.fromUserId.toString());
+      hideUsersFromFeed.add(req.toUserId.toString());
+    });
+
+    const users = await User.find({
+      // Exclude users in hideUsersFromFeed and the logged-in user
+      $and: [
+        { _id: { $nin: Array.from(hideUsersFromFeed) } },
+        { _id: { $ne: loggedInUser._id } },
+      ],
+    })
+      .select(USER_SAFE_DATA)
+      .skip(skip)
+      .limit(limit);
+
+    // Shuffle users so feed order is random on each request
+    const shuffledUsers = [...users];
+    for (let i = shuffledUsers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledUsers[i], shuffledUsers[j]] = [shuffledUsers[j], shuffledUsers[i]];
+    }
+
+    res.json({ data: shuffledUsers });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 
