@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from "../assets/logo.png";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -8,6 +9,7 @@ const Footer = () => {
       <aside className="flex flex-col gap-2">
         {/* Branding Section */}
         <div className="flex items-center gap-3">
+         <Link to="/" className="btn btn-ghost text-xl">
           <img 
             src={logo}  
             alt="DevMesh Logo"
@@ -16,6 +18,7 @@ const Footer = () => {
           <span className="text-2xl font-black tracking-tighter text-white">
             Dev<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-blue-400 to-orange-400">Mesh</span>
           </span>
+          </Link>
         </div>
         
         <p className="max-w-xs text-gray-400 mt-2">
@@ -27,7 +30,6 @@ const Footer = () => {
         </p>
       </aside>
 
-      {/* Nav Sections for a more "Professional" feel */}
       <nav>
         <h6 className="footer-title text-orange-400 opacity-100">Platform</h6>
         <a className="link link-hover hover:text-purple-400">Discover Devs</a>
