@@ -29,7 +29,7 @@ const Login = () => {
         }
         );
         dispatch(addUser(res.data));
-        navigate("/");
+        navigate("/feed");
       } catch (error) {
         console.error("Login Failed:", error.response ? error.response.data : error.message);
       }
