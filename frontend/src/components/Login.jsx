@@ -15,6 +15,7 @@ const Login = () => {
     const [password, setPassword] = useState("Khushi1404@");
      const dispatch = useDispatch();
      const navigate = useNavigate();
+      const [error, setError] = useState("");
 
     const handleLogin = async () => {
       try {
@@ -30,9 +31,9 @@ const Login = () => {
         );
         dispatch(addUser(res.data));
         navigate("/feed");
-      } catch (error) {
-        console.error("Login Failed:", error.response ? error.response.data : error.message);
-      }
+      }  catch(err){
+            setError(err.response?.data?.message || err.response?.data || "Invalid email or password");
+        } 
     };
 
   return (
@@ -90,7 +91,18 @@ const Login = () => {
               className="input input-bordered w-full bg-base-200/50 focus:input-primary transition-all shadow-inner" 
             />
           </div>
-
+          {error && (
+            <div className="mt-6 p-4 bg-black/60 border-l-4 border-error rounded-r-lg shadow-[0_0_15px_rgba(255,0,0,0.1)] animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex items-start gap-3">
+              <span className="mt-1.5 h-2 w-2 rounded-full bg-error animate-pulse shadow-[0_0_8px_#ff0000]"></span>
+               <div className="flex flex-col gap-1">
+                <p className="text-sm font-mono text-error leading-relaxed">
+                {error}
+                  </p>
+              </div>
+            </div>
+          </div>
+          )}
           <div className="card-actions mt-10">
             <button onClick={handleLogin} className="btn btn-primary w-full group relative overflow-hidden border-none shadow-xl 
             hover:shadow-blue-500/40 transition-all text-white">
