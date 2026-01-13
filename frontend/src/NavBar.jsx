@@ -4,15 +4,14 @@ import logo from "./assets/logo.png";
 
 const NavBar = () => {
   return (
-    <div className="navbar sticky top-0 z-50 px-4 sm:px-8 shadow-xl backdrop-blur-md 
-                    bg-gradient-to-r from-[#2e1065]/90 via-blue-700/90 to- bg-purple-950/90 
-                    border-b border-white/10">
-  <div className="flex-1">
+    <div className="navbar bg-base-300 shadow-2xl">
+   <div className="flex-1">
     <a className="btn btn-ghost text-xl">
        <img 
-        src= {logo}  
+        src={logo}  
         alt="DevMesh Logo"
-       className="w-24 h-24 object-contain transition-all duration-300 hover:rotate-12 hover:scale-110 "/>
+        className="w-24 h-24 object-contain transition-all duration-700 hover:[transform:rotateY(180deg)] hover:scale-110 drop-shadow-2xl"
+      />
       <span className="text-2xl font-black tracking-tighter text-white">
       Dev<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-blue-400 to-orange-400">Mesh</span>
       </span>
