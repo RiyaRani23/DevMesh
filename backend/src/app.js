@@ -7,14 +7,9 @@ require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  ...(process.env.FRONTEND_URI ? process.env.FRONTEND_URI.split(",") : []),
-].filter(Boolean);
-
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "http://localhost:5173",
     credentials: true, 
   })
 );

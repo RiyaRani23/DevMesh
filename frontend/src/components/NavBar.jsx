@@ -1,8 +1,13 @@
 import React from 'react';
-import logo from "./assets/logo.png"; 
+import logo from "../assets/logo.png"; 
+import { useSelector } from "react-redux"
+import { DEFAULT_PHOTO_URL } from '../utils/constants';
 
 
 const NavBar = () => {
+   const user = useSelector(store => store.user);
+   console.log("NAVBAR USER:", user);
+
   return (
     <div className="navbar bg-base-300 shadow-2xl">
    <div className="flex-1">
@@ -17,13 +22,22 @@ const NavBar = () => {
       </span>
     </a>
   </div>
-  <div className="flex gap-2">
-    <div className="dropdown dropdown-end mx-5">
-      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-        <div className="w-10 rounded-full">
+   { user && (
+    <div className="flex items-center gap-4 mx-5">
+    <div className="hidden md:block text-right">
+      <p className="text-xs opacity-60 font-bold uppercase tracking-widest">Welcome</p>
+      <p className="text-sm font-bold text-white">{user.firstName}</p>
+    </div>
+    <div className="dropdown dropdown-end">
+      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar online">
+        <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
           <img
-            alt="Tailwind CSS Navbar component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    alt="User Photo"
+                    src={user.photoUrl || DEFAULT_PHOTO_URL}
+                    onError={(e) => {
+                      e.target.src = DEFAULT_PHOTO_URL;
+                    }}
+                  />
         </div>
       </div>
       <ul
@@ -40,6 +54,7 @@ const NavBar = () => {
       </ul>
     </div>
   </div>
+)}
 </div>
   )
 }

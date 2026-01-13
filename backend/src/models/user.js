@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        default: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-library.com%2Ficon%2Fprofile-picture-icon-15.html&psig=AOvVaw0UUL4DYStm5-K6LP0QVTdp&ust=1764748521918000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCKDC9de2npEDFQAAAAAdAAAAABAK',
+        default: "https://static.vecteezy.com/system/resources/previews/007/319/933/non_2x/black-avatar-person-icons-user-profile-icon-vector.jpg",
         validate(value) {
             if(!validator.isURL(value)) {
                 throw new Error("Invalid photo URL");

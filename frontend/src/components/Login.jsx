@@ -1,7 +1,40 @@
 import React from "react";
-import logo from "./assets/logo.png";
+import logo from "../assets/logo.png";
+import { useState } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { addUser } from "../utils/userSlice";
+import { BASE_URL } from "../utils/constants";
+
+
 
 const Login = () => {
+
+    const [emailId, setEmailId] = useState("Khushi1404@gmail.com");
+    const [password, setPassword] = useState("Khushi1404@");
+     const dispatch = useDispatch();
+     const navigate = useNavigate();
+
+    const handleLogin = async () => {
+      try {
+        const res = await axios.post(
+          BASE_URL + "/login",
+         {
+            emailId: emailId.trim(),
+             password: password.trim(),
+         },
+         {
+             withCredentials: true,
+        }
+        );
+        dispatch(addUser(res.data));
+        navigate("/");
+      } catch (error) {
+        console.error("Login Failed:", error.response ? error.response.data : error.message);
+      }
+    };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-neutral relative overflow-hidden">
      
@@ -15,12 +48,6 @@ const Login = () => {
           <div className="flex flex-col items-center mb-8">
             <div className="avatar mb-4">
               <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-2xl">
-               {/* <img 
-                       src= {logo}  
-                       alt="DevMesh Logo"
-                       className="w-32 h-32 object-contain p-4 rounded-2xl bg-gradient-to-tr from-blue-50
-                        to-orange-50 shadow-inner transition-all duration-300 hover:scale-110"/> */}
-
                 <img 
                       src={logo}  
                       alt="DevMesh Logo"
@@ -44,6 +71,8 @@ const Login = () => {
             <input 
               type="email" 
               placeholder="abcd@devmesh.com" 
+              value={emailId}
+              onChange={(e) => setEmailId(e.target.value)}
               className="input input-bordered w-full bg-base-200/50 focus:input-primary transition-all shadow-inner" 
             />
           </div>
@@ -56,14 +85,16 @@ const Login = () => {
             <input 
               type="password" 
               placeholder="••••••••" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="input input-bordered w-full bg-base-200/50 focus:input-primary transition-all shadow-inner" 
             />
           </div>
 
           <div className="card-actions mt-10">
-            <button className="btn btn-primary w-full group relative overflow-hidden border-none shadow-xl 
+            <button onClick={handleLogin} className="btn btn-primary w-full group relative overflow-hidden border-none shadow-xl 
             hover:shadow-blue-500/40 transition-all text-white">
-              <span className="relative z-10 font-bold uppercase tracking-widest">Login</span>
+              <span className="relative z-10 font-bold uppercase tracking-widest" onClick={handleLogin}>Login</span>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-orange-500 opacity-90 group-hover:opacity-100 
               transition-opacity"></div>
             </button>
