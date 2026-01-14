@@ -43,7 +43,14 @@ const Profile = () => {
                 <div className="card-body items-center text-center pt-10 pb-8">
                   <div className="avatar mb-6">
                     <div className="w-40 h-40 rounded-full ring-offset-base-200 ring-offset-4 ring-4 ring-primary shadow-2xl overflow-hidden transform group-hover:scale-[1.03] transition-transform duration-500">
-                      <img src={DEFAULT_PHOTO_URL} alt={fullName} className="object-cover h-full w-full" />
+                      <img 
+                            src={displayPhotoUrl} 
+                            alt={fullName} 
+                            className="object-cover h-full w-full" 
+                            onError={(e) => {
+                            e.target.src = DEFAULT_PHOTO_URL; 
+                       }}
+                      />
                     </div>
                   </div>
 
