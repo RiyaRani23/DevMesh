@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { addFeed } from "../utils/feedSlice";
 import UserCard from "./UserCard";
+import ShimmerCard from "./ShimmerCard";
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -34,13 +35,19 @@ const Feed = () => {
     getFeed();
   }, []);
 
-  if (!Array.isArray(feed) || feed.length === 0) {
+  if (!feed) {
     return (
-      <p className="text-center opacity-60 my-16">
-        No New Users Found
-      </p>
+      <div className="max-w-6xl mx-auto my-10 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((n) => <ShimmerCard key={n} />)}
+        </div>
+      </div>
     );
   }
+
+if (feed.length === 0) {
+    return <p className="text-center opacity-60 my-16">No New Users Found</p>;
+}
 
   // 🔍 PREFIX-BASED SEARCH FILTER
   const filteredFeed = feed.filter((user) => {
