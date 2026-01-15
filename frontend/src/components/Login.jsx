@@ -1,189 +1,112 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
-import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { BASE_URL } from "../utils/constants";
 
-
-
 const Login = () => {
-
-    const [emailId, setEmailId] = useState("Khushi1404@gmail.com");
-    const [password, setPassword] = useState("Khushi1404@");
+    const [emailId, setEmailId] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-     const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-     const user = useSelector(store => store.user);
+    const user = useSelector(store => store.user);
 
-      useEffect(() => {
-        if(user) {
-            navigate("/feed", { replace: true });
-        }
-      }, [user, navigate]);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        
-        if (name === "emailId") {
-            setEmailId(value);
-        } else if (name === "password") {
-            setPassword(value);
-        }
-        
-        if (error) setError("");
-    };
-
+    useEffect(() => {
+        if(user) navigate("/feed");
+    }, [user, navigate]);
 
     const handleLogin = async (e) => {
-       if (e) e.preventDefault();
-        
+        if (e) e.preventDefault();
         setError("");
-        
-        // Basic required field check - backend validates
-        if (!emailId.trim() || !password) {
-            setError("Please fill in all required fields");
-            return;
-        }
+        if (!emailId || !password) return setError("All fields are required");
         setIsLoading(true);
-      try {
-        const res = await axios.post(
-          BASE_URL + "/login",
-         {
-            emailId: emailId.trim(),
-             password: password.trim(),
-         },
-         {
-             withCredentials: true,
-        }
-        );
-        dispatch(addUser(res.data));
-        navigate("/feed");
-      }  catch(err){
-            setError(err.response?.data?.message || err.response?.data || "Invalid email or password");
-        } 
-        finally {
+        try {
+            const res = await axios.post(BASE_URL + "/login", { emailId, password }, { withCredentials: true });
+            dispatch(addUser(res.data));
+            navigate("/feed");
+        } catch(err){
+            setError(err.response?.data?.message || "Invalid credentials");
+        } finally {
             setIsLoading(false);
         }
     };
 
-    const handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-            handleLogin(e);
-        }
-    };
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-[#0f172a] relative overflow-hidden">
+            {/* Dynamic Background Blobs */}
+            <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+            <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+            <div className="absolute -bottom-8 left-20 w-72 h-72 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
 
+            <div className="card w-full max-w-md bg-white/5 backdrop-blur-xl shadow-2xl border border-white/10 z-10 m-4 transition-all hover:border-white/20">
+                <div className="card-body p-10">
+                    <div className="flex flex-col items-center mb-10">
+                        <div className="avatar mb-4 animate-bounce-slow">
+                            <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 p-1 shadow-2xl">
+                                <img src={logo} alt="Logo" className="rounded-2xl bg-white p-2" />
+                            </div>
+                        </div>
+                        <h2 className="text-4xl font-black text-white tracking-tighter">
+                            DEV<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-400">MESH</span>
+                        </h2>
+                        <p className="text-[10px] uppercase tracking-[0.4em] text-blue-400 font-bold">The Developer Network</p>
+                    </div>
 
-  return (
-    <div className="flex justify-center items-center min-h-screen bg-neutral relative overflow-hidden">
-     
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+                    <div className="space-y-4">
+                        <div className="form-control">
+                            <input 
+                                type="email" 
+                                placeholder="Email Address" 
+                                value={emailId}
+                                onChange={(e) => setEmailId(e.target.value)}
+                                className="input bg-white/10 border-white/10 text-white placeholder:text-gray-500 focus:bg-white/20 focus:border-blue-500 transition-all" 
+                            />
+                        </div>
 
-      
-      <div className="card w-full max-w-md bg-base-100/80 backdrop-blur-lg shadow-2xl border border-white/10 z-10 m-4">
-        <div className="card-body p-8">
-        
-          <div className="flex flex-col items-center mb-8">
-            <div className="avatar mb-4">
-              <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-2xl">
-                <img 
-                      src={logo}  
-                      alt="DevMesh Logo"
-                      className="w-32 h-32 object-contain rounded-2xl transition-all duration-700 bg-white
-                      hover:[transform:rotateY(180deg)] hover:scale-110 drop-shadow-2xl"
-                />
-              </div>
+                        <div className="form-control relative">
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                placeholder="Password" 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="input bg-white/10 border-white/10 text-white placeholder:text-gray-500 focus:bg-white/20 focus:border-blue-500 transition-all" 
+                            />
+                            <button 
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-3 text-xs font-bold text-gray-400 hover:text-white"
+                            >
+                                {showPassword ? "HIDE" : "SHOW"}
+                            </button>
+                        </div>
+                    </div>
+
+                    {error && <p className="text-red-400 text-xs mt-4 font-mono">{error}</p>}
+
+                    <div className="mt-8">
+                        <button 
+                            onClick={handleLogin} 
+                            disabled={isLoading}
+                            className="btn btn-primary w-full bg-gradient-to-r from-blue-600 to-indigo-600 border-none hover:scale-[1.02] active:scale-95 transition-all text-white font-bold"
+                        >
+                            {isLoading ? "AUTHENTICATING..." : "LOGIN TO ACCOUNT"}
+                        </button>
+                    </div>
+
+                    <div className="mt-6 text-center">
+                        <p className="text-gray-400 text-sm">Don't have an account?</p>
+                        <Link to="/signup" className="text-blue-400 font-bold hover:underline mt-1 block">Create Developer ID</Link>
+                    </div>
+                </div>
             </div>
-            <h2 className="text-4xl font-black tracking-tighter text-base-content">
-              DEV<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-blue-400
-               to-orange-400">MESH</span>
-            </h2>
-            <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-orange-500 mt-1 rounded-full"></div>
-            <p className="text-xs uppercase tracking-[0.2em] mt-2 opacity-60 font-bold">Connect & Build</p>
-          </div>
-
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-bold">Developer Email</span>
-            </label>
-            <input 
-              type="email" 
-              placeholder="abcd@devmesh.com" 
-              value={emailId}
-              onChange={ (e) => {
-                 setEmailId(e.target.value);
-                if(error) setError("");
-              }}
-              onKeyDown={handleKeyPress}
-              className="input input-bordered w-full bg-base-200/50 focus:input-primary transition-all shadow-inner" 
-            />
-          </div>
-
-          <div className="form-control w-full mt-4">
-            <label className="label">
-              <span className="label-text font-bold">Password</span>
-              <span className="label-text-alt link link-hover text-primary font-medium">Forgot Password?</span>
-            </label>
-            <input 
-              type={showPassword ? "text" : "password"} 
-              placeholder="••••••••" 
-              value={password}
-              onChange={(e) => {
-                                    setPassword(e.target.value);
-                                    if(error) setError("");
-                                }}
-                                onKeyDown={handleKeyPress}
-              className="input input-bordered w-full bg-base-200/50 focus:input-primary transition-all shadow-inner" 
-            />
-            <button 
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                   className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold opacity-50 hover:opacity-100"
-                    >
-                    {showPassword ? "HIDE" : "SHOW"}
-           </button>
-          </div>
-          {error && (
-            <div className="mt-6 p-4 bg-black/60 border-l-4 border-error rounded-r-lg shadow-[0_0_15px_rgba(255,0,0,0.1)] animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="flex items-start gap-3">
-              <span className="mt-1.5 h-2 w-2 rounded-full bg-error animate-pulse shadow-[0_0_8px_#ff0000]"></span>
-               <div className="flex flex-col gap-1">
-                <p className="text-sm font-mono text-error leading-relaxed">
-                {error}
-                  </p>
-              </div>
-            </div>
-          </div>
-          )}
-          <div className="card-actions mt-10">
-            <button 
-            onClick={handleLogin} 
-            disabled={isLoading}
-            className="btn btn-primary w-full group relative overflow-hidden border-none shadow-xl 
-            hover:shadow-blue-500/40 transition-all text-white">
-              <span className="relative z-10 font-bold uppercase tracking-widest" 
-              onClick={handleLogin}
-              >{isLoading ? "Verifying..." : "Login"}</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-orange-500 opacity-90 group-hover:opacity-100 
-              transition-opacity"></div>
-            </button>
-          </div>
-          
-          <div className="divider text-xs opacity-50 uppercase tracking-widest mt-8">New to the network?</div>
-          
-          <Link to="/signup" className="btn btn-outline btn-block hover:bg-base-200 hover:text-base-content border-base-300 no-underline">
-                        Create Developer Account
-            </Link>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Login;

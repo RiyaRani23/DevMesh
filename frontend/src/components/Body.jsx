@@ -17,6 +17,9 @@ const Body = () => {
 
 const fetchUser = async () => {
         if(userData) return;
+
+        if(['/login', '/signup'].includes(location.pathname)) return;
+        
         try{
             const res = await axios.get(`${BASE_URL}/profile/view`, {
                 withCredentials: true
