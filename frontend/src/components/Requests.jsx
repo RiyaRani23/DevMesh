@@ -10,7 +10,9 @@ import {
 
 const Requests = () => {
   const dispatch = useDispatch();
-  const { received, sent } = useSelector((store) => store.requests);
+  const requestsData = useSelector((store) => store.requests);
+  const received = requestsData?.received || [];
+  const sent = requestsData?.sent || [];
 
   const fetchReceivedRequests = async () => {
     try {

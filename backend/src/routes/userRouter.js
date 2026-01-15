@@ -7,7 +7,7 @@ const User = require("../models/user");
 // Define safe user data fields to be returned
 const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills";
 
-userRouter.get("/user.requests/recieved", userAuth, async (req, res) => {
+userRouter.get("/user/requests/received", userAuth, async (req, res) => {
 
     try {
     const loggedInUser = req.user;
@@ -99,6 +99,27 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     res.json({ data: shuffledUsers });
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+// Get all connection requests sent by LoggedIn user
+userRouter.get("/user/requests/sent", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connectionRequestsByUser = await ConnectionRequest.find({
+      fromUserId: loggedInUser._id,
+      status: "interested",
+    }).populate(
+      "toUserId", USER_SAFE_DATA);
+    // }).populate("fromUserId", ["firstName", "lastName"]);
+
+    res.json({
+      message: "Data fetched successfully",
+      data: connectionRequestsByUser,
+    });
+  } catch (err) {
+    req.statusCode(400).send("ERROR: " + err.message);
   }
 });
 

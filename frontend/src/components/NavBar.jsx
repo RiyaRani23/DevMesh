@@ -67,13 +67,20 @@ const NavBar = () => {
         </span>
        <span className="badge badge-primary badge-sm">New</span>
        </Link>
+       </li>
        <li>
        <Link to="/connections" className="flex justify-between">
            Connections
        </Link>
        </li>
+       <li>
+       <Link to="/requests" className="flex justify-between">
+           Requests
+       </Link>
+       </li>
+       <li>
           <a onClick={handleLogout}>Logout</a>
-          </li>
+        </li>
       </ul>
     </div>
   </div>
