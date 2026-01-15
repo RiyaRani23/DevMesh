@@ -59,17 +59,28 @@ const UserCard = ({ user }) => {
                 </p>
             </div>
 
-            <div className="mt-4">
-                <button 
-                    className="btn btn-primary w-full gap-2 group/btn"
-                    onClick={() => handleSendRequest("interested", _id)}
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 group-hover/btn:scale-110 transition-transform">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v9m-4.5-4.5h9M3 20.25v-1.5a4.5 4.5 0 014.5-4.5h4.5a4.5 4.5 0 014.5 4.5v1.5m-1.5-12.75a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Interested
-                </button>
-            </div>
+            <div className="mt-4 flex gap-3">
+    <button 
+        className="btn btn-outline btn-secondary flex-1 gap-2 group/btn"
+        onClick={() => handleSendRequest("ignored", _id)}
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Ignore
+    </button>
+
+    <button 
+        className="btn btn-primary flex-1 gap-2 group/btn"
+        onClick={() => handleSendRequest("interested", _id)}
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 group-hover/btn:scale-110 transition-transform">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v9m-4.5-4.5h9M3 20.25v-1.5a4.5 4.5 0 014.5-4.5h4.5a4.5 4.5 0 014.5 4.5v1.5m-1.5-12.75a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Interested
+    </button>
+</div>
+            
         </div>
     );
 };

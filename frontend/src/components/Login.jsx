@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../assets/logo.png";
 import { useState } from "react";
 import axios from "axios";
@@ -13,11 +13,44 @@ const Login = () => {
 
     const [emailId, setEmailId] = useState("Khushi1404@gmail.com");
     const [password, setPassword] = useState("Khushi1404@");
-     const dispatch = useDispatch();
-     const navigate = useNavigate();
-      const [error, setError] = useState("");
+    const [error, setError] = useState("");
+     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = async () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+     const user = useSelector(store => store.user);
+
+      useEffect(() => {
+        if(user) {
+            navigate("/feed", { replace: true });
+        }
+      }, [user, navigate]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        
+        if (name === "emailId") {
+            setEmailId(value);
+        } else if (name === "password") {
+            setPassword(value);
+        }
+        
+        if (error) setError("");
+    };
+
+
+    const handleLogin = async (e) => {
+       if (e) e.preventDefault();
+        
+        setError("");
+        
+        // Basic required field check - backend validates
+        if (!emailId.trim() || !password) {
+            setError("Please fill in all required fields");
+            return;
+        }
+        setIsLoading(true);
       try {
         const res = await axios.post(
           BASE_URL + "/login",
@@ -34,7 +67,17 @@ const Login = () => {
       }  catch(err){
             setError(err.response?.data?.message || err.response?.data || "Invalid email or password");
         } 
+        finally {
+            setIsLoading(false);
+        }
     };
+
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleLogin(e);
+        }
+    };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-neutral relative overflow-hidden">
@@ -73,7 +116,11 @@ const Login = () => {
               type="email" 
               placeholder="abcd@devmesh.com" 
               value={emailId}
-              onChange={(e) => setEmailId(e.target.value)}
+              onChange={ (e) => {
+                 setEmailId(e.target.value);
+                if(error) setError("");
+              }}
+              onKeyDown={handleKeyPress}
               className="input input-bordered w-full bg-base-200/50 focus:input-primary transition-all shadow-inner" 
             />
           </div>
@@ -84,12 +131,23 @@ const Login = () => {
               <span className="label-text-alt link link-hover text-primary font-medium">Forgot Password?</span>
             </label>
             <input 
-              type="password" 
+              type={showPassword ? "text" : "password"} 
               placeholder="••••••••" 
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    if(error) setError("");
+                                }}
+                                onKeyDown={handleKeyPress}
               className="input input-bordered w-full bg-base-200/50 focus:input-primary transition-all shadow-inner" 
             />
+            <button 
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                   className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold opacity-50 hover:opacity-100"
+                    >
+                    {showPassword ? "HIDE" : "SHOW"}
+           </button>
           </div>
           {error && (
             <div className="mt-6 p-4 bg-black/60 border-l-4 border-error rounded-r-lg shadow-[0_0_15px_rgba(255,0,0,0.1)] animate-in fade-in slide-in-from-top-2 duration-300">
@@ -104,9 +162,14 @@ const Login = () => {
           </div>
           )}
           <div className="card-actions mt-10">
-            <button onClick={handleLogin} className="btn btn-primary w-full group relative overflow-hidden border-none shadow-xl 
+            <button 
+            onClick={handleLogin} 
+            disabled={isLoading}
+            className="btn btn-primary w-full group relative overflow-hidden border-none shadow-xl 
             hover:shadow-blue-500/40 transition-all text-white">
-              <span className="relative z-10 font-bold uppercase tracking-widest" onClick={handleLogin}>Login</span>
+              <span className="relative z-10 font-bold uppercase tracking-widest" 
+              onClick={handleLogin}
+              >{isLoading ? "Verifying..." : "Login"}</span>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-orange-500 opacity-90 group-hover:opacity-100 
               transition-opacity"></div>
             </button>
@@ -114,9 +177,9 @@ const Login = () => {
           
           <div className="divider text-xs opacity-50 uppercase tracking-widest mt-8">New to the network?</div>
           
-          <button className="btn btn-outline btn-block hover:bg-base-200 hover:text-base-content border-base-300">
-            Create Developer Account
-          </button>
+          <Link to="/signup" className="btn btn-outline btn-block hover:bg-base-200 hover:text-base-content border-base-300 no-underline">
+                        Create Developer Account
+            </Link>
         </div>
       </div>
     </div>
