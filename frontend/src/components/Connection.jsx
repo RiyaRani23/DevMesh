@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import { addConnection } from "../utils/connectionSlice";
+import connection from "../assets/connection.avif";
 
 const Connections = () => {
     const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const Connections = () => {
     return (
         <div className="min-h-screen bg-base-200/50 py-12 px-4">
             <div className="max-w-3xl mx-auto">
+                
                 
                 {/* Visual Stats Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 px-2 gap-4">

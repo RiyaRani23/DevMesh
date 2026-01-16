@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-import star from "../assets/star.jpg";
+import connection from "../assets/connection.avif";
 
 const Hero = () => {
   return (
@@ -11,7 +11,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `url(${star})`,
+          backgroundImage: `url(${connection})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed' 

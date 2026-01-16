@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { BASE_URL } from "../utils/constants";
+import background from "../assets/background.avif";
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -76,10 +77,18 @@ const Signup = () => {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-neutral relative overflow-hidden py-12 px-4">
-            {/* Background Animations */}
-            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-orange-500/30 rounded-full blur-3xl animate-pulse delay-700"></div>
-
+              <div 
+                                 className="absolute inset-0 z-0"
+                                 style={{
+                                   backgroundImage: `url(${background})`,
+                                   backgroundSize: 'cover',
+                                   backgroundPosition: 'center',
+                                   backgroundAttachment: 'fixed' 
+                                 }}
+                               >
+                                
+                                 <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
+                               </div>
             {/* Magnificent Border Container: Uses a gradient background with padding to simulate a thin border */}
             <div className="relative p-[2px] rounded-3xl bg-gradient-to-br from-primary via-blue-500 to-orange-500 shadow-2xl w-full max-w-2xl group transition-all duration-500 hover:shadow-primary/20">
                 

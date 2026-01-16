@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { BASE_URL } from "../utils/constants";
+import BG from "../assets/BG.avif";
 
 const Login = () => {
     const [emailId, setEmailId] = useState("");
@@ -38,12 +39,22 @@ const Login = () => {
     };
 
     return (
+        
         <div className="flex justify-center items-center min-h-screen bg-[#0f172a] relative overflow-hidden">
-            {/* Dynamic Background Blobs */}
-            <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-            <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-            <div className="absolute -bottom-8 left-20 w-72 h-72 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
-
+            {/* --- BACKGROUND IMAGE LAYER --- */}
+                  <div 
+                    className="absolute inset-0 z-0"
+                    style={{
+                      backgroundImage: `url(${BG})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundAttachment: 'fixed' 
+                    }}
+                  >
+                   
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
+                  </div>
+            {/* --- LOGIN CARD --- */}
             <div className="card w-full max-w-md bg-white/5 backdrop-blur-xl shadow-2xl border border-white/10 z-10 m-4 transition-all hover:border-white/20">
                 <div className="card-body p-10">
                     <div className="flex flex-col items-center mb-10">
