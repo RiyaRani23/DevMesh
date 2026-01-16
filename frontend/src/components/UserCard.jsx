@@ -28,7 +28,7 @@ const UserCard = ({ user }) => {
          min-h-[450px] border border-white/5 transition-all duration-500 hover:shadow-primary/20 hover:-translate-y-2">
             
             {/* --- GLOW EFFECT ON HOVER --- */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors"></div>
+            <div className="absolute -top-20 -right-20 w-34 h-34 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors"></div>
 
             {/* --- PROFILE IMAGE --- */}
             <div className="relative flex justify-center mb-6">
@@ -37,7 +37,7 @@ const UserCard = ({ user }) => {
                     <img
                         src={photoUrl || "https://via.placeholder.com/150"}
                         alt="Profile"
-                        className="relative w-32 h-32 rounded-full object-cover border-4 border-base-300 shadow-xl"
+                        className="relative w-28 h-28 rounded-full object-cover border-4 border-base-300 shadow-xl"
                     />
                     <div className="absolute bottom-1 right-2 w-5 h-5 bg-green-500 border-4 border-base-300 rounded-full shadow-sm"></div>
                 </div>
