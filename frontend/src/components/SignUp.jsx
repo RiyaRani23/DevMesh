@@ -21,6 +21,8 @@ const Signup = () => {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [skills, setSkills] = useState([]);
+    const [skillInput, setSkillInput] = useState("");
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -29,6 +31,19 @@ const Signup = () => {
     useEffect(() => {
         if(user) navigate("/feed");
     }, [user, navigate]);
+
+    const addSkill = (e) => {
+        e.preventDefault();
+        const trimmed = skillInput.trim();
+        if (trimmed && !skills.includes(trimmed) && skills.length < 10) {
+            setSkills([...skills, trimmed]);
+            setSkillInput("");
+        }
+    };
+
+    const removeSkill = (skillToRemove) => {
+        setSkills(skills.filter(s => s !== skillToRemove));
+    };
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -130,6 +145,35 @@ const Signup = () => {
                             <div className="form-control">
                                 <label className="label font-bold text-xs uppercase opacity-70">Age</label>
                                 <input name="age" type="number" placeholder="25" className="input input-bordered focus:border-primary transition-all bg-base-200/50" onChange={handleChange} />
+                            </div>
+
+                            <div className="form-control md:col-span-2">
+                                <label className="label font-bold text-xs uppercase opacity-70">
+                                    Tech Stack (Skills)
+                                    <span className="text-[10px] opacity-50">{skills.length}/10</span>
+                                </label>
+                                <div className="flex gap-2">
+                                    <input 
+                                        type="text" 
+                                        value={skillInput}
+                                        placeholder="e.g. React, Node, SQL"
+                                        className="input input-bordered flex-1 focus:border-primary transition-all bg-base-200/50" 
+                                        onChange={(e) => setSkillInput(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && addSkill(e)}
+                                    />
+                                    <button type="button" onClick={addSkill} className="btn btn-primary btn-square">
+                                        +
+                                    </button>
+                                </div>
+                                {/* Tag Cloud Display */}
+                                <div className="flex flex-wrap gap-2 mt-3 p-2 bg-base-200/30 rounded-xl min-h-[45px]">
+                                    {skills.map((skill, index) => (
+                                        <div key={index} className="badge badge-primary badge-lg gap-2 py-4 pl-4 pr-1 font-bold">
+                                            {skill}
+                                            <button type="button" onClick={() => removeSkill(skill)} className="btn btn-ghost btn-xs btn-circle hover:bg-white hover:text-primary">✕</button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
                             {/* About */}
