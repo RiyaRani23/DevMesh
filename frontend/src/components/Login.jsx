@@ -84,6 +84,16 @@ const Login = () => {
                             >
                                 {showPassword ? "HIDE" : "SHOW"}
                             </button>
+                            {/* Inside your Login.jsx form, after the password input */}
+<div className="flex justify-between items-center mt-2 px-1">
+    <label className="label cursor-pointer gap-2">
+        <input type="checkbox" className="checkbox checkbox-xs checkbox-primary" />
+        <span className="label-text text-xs opacity-60">Remember me</span>
+    </label>
+    <Link to="/forgot-password" size="xs" className="text-[10px] font-bold text-primary hover:underline uppercase tracking-widest">
+        Forgot Password?
+    </Link>
+</div>
                         </div>
                     </div>
 

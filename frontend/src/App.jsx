@@ -10,6 +10,7 @@ import Connections from "./components/Connection";
 import Requests from "./components/Requests";
 import Signup from "./components/SignUp";
 import Hero from "./components/Hero";
+import ForgotPassword from "./components/ForgotPassword";
 import { useSelector } from "react-redux";
 
 const Home = () => {
@@ -32,6 +33,7 @@ function App() {
        <Route path="/connections" element={<Connections />} />
        <Route path="/requests" element={<Requests />} />
        <Route path="/signup" element={<Signup />} />
+       <Route path="/forgot-password" element={<ForgotPassword />} />
       
        </Route>
     </Routes>
