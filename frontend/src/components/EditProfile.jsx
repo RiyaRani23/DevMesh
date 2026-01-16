@@ -21,7 +21,8 @@ const EditProfile = () => {
     const [errors, setErrors] = useState({});
     const [showToast, setShowToast] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
+    const [skills, setSkills] = useState(user?.skills || []); 
+    const [skillInput, setSkillInput] = useState('');
     useEffect(() => {
         if (!user) navigate('/login');
     }, [user, navigate]);
@@ -67,7 +68,8 @@ const EditProfile = () => {
                 about: about.trim(),
                 photoUrl: photoUrl.trim(),
                 gender: gender.trim().toLowerCase(),
-                age: age ? parseInt(age, 10) : undefined
+                age: age ? parseInt(age, 10) : undefined,
+                skills: skills
             };
 
             const res = await axios.patch(`${BASE_URL}/profile/edit`, updateData, { withCredentials: true });
@@ -86,6 +88,19 @@ const EditProfile = () => {
         input input-bordered w-full transition-all duration-300 bg-base-100
         ${errors[fieldName] ? 'border-error ring-1 ring-error' : 'border-base-300 focus:border-primary focus:ring-1 focus:ring-primary'}
     `;
+
+    const addSkill = (e) => {
+      e.preventDefault();
+      const trimmedSkill = skillInput.trim();
+      if (trimmedSkill && !skills.includes(trimmedSkill) && skills.length < 10) {
+        setSkills([...skills, trimmedSkill]);
+        setSkillInput('');
+      }
+     };
+
+    const removeSkill = (skillToRemove) => {
+       setSkills(skills.filter(skill => skill !== skillToRemove));
+     };
 
     return (
         <div className="min-h-screen bg-base-200/50 py-12 px-4 md:px-8">
@@ -215,6 +230,43 @@ const EditProfile = () => {
                                         />
                                         {errors.photoUrl && <span className="text-error text-xs mt-1">{errors.photoUrl}</span>}
                                     </div>
+
+        {/* --- Tech Stack Section --- */}
+<div className="form-control md:col-span-2">
+    <label className="label">
+        <span className="label-text font-bold text-base-content/70">Tech Stack</span>
+        <span className="label-text-alt">{skills.length}/10</span>
+    </label>
+    
+    <div className="flex gap-2 mb-3">
+        <input 
+            type="text"
+            value={skillInput}
+            onChange={(e) => setSkillInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && addSkill(e)} // Allows Enter to add
+            placeholder="e.g. React, NodeJS, MongoDB"
+            className="input input-bordered flex-1 focus:border-primary"
+        />
+        <button type="button" className="btn btn-primary" onClick={addSkill}>Add</button>
+    </div>
+    
+    {/* Visual Tags Display */}
+    <div className="flex flex-wrap gap-2 p-3 bg-base-200/50 rounded-2xl min-h-[60px] border border-base-300">
+        {skills.map((skill, index) => (
+            <div key={index} className="badge badge-lg py-4 pl-4 pr-1 gap-2 font-bold bg-base-100 border-primary/20 text-primary">
+                {skill}
+                <button 
+                    type="button"
+                    onClick={() => removeSkill(skill)}
+                    className="btn btn-ghost btn-xs btn-circle hover:bg-error hover:text-white"
+                >
+                    ✕
+                </button>
+            </div>
+        ))}
+        {skills.length === 0 && <p className="text-sm opacity-40 p-2">No skills added yet...</p>}
+    </div>
+</div>
 
                                     {/* About */}
                                     <div className="form-control md:col-span-2">

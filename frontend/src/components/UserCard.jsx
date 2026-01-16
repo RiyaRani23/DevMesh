@@ -6,7 +6,9 @@ import { removeUser } from "../utils/feedSlice";
 const UserCard = ({ user }) => {
     const dispatch = useDispatch();
     if (!user) return null;
-    const { _id, firstName, lastName, photoUrl, about } = user;
+
+    // Destructuring skills (assuming your schema has them, or showing a default)
+    const { _id, firstName, lastName, photoUrl, about, skills = ["React", "NodeJS"] } = user;
 
     const handleSendRequest = async (status, userId) => {
         try {
@@ -22,64 +24,81 @@ const UserCard = ({ user }) => {
     };
 
     return (
-        <div className="group relative w-80 bg-base-300 shadow-xl rounded-xl p-4 overflow-hidden transition-all hover:scale-[1.02]">
+        <div className="group relative w-80 bg-gradient-to-br from-base-300 to-base-100 shadow-2xl rounded-3xl p-6 overflow-hidden 
+        border border-white/5 transition-all duration-500 hover:shadow-primary/20 hover:-translate-y-2">
             
-            <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12"></div>
+            {/* --- GLOW EFFECT ON HOVER --- */}
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors"></div>
 
+            {/* --- TOP ACTION: IGNORE (X) --- */}
             <button 
-                className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 z-10"
+                className="btn btn-xs btn-circle btn-ghost absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={() => handleSendRequest("ignored", _id)}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
 
-            <div className="flex justify-center mt-2">
-                <div className="relative">
+            {/* --- PROFILE IMAGE --- */}
+            <div className="relative flex justify-center mb-6">
+                <div className="relative group/avatar">
+                    <div className="absolute inset-0 bg-primary rounded-full blur-md opacity-20 group-hover/avatar:opacity-40 transition-opacity"></div>
                     <img
                         src={photoUrl || "https://via.placeholder.com/150"}
                         alt="Profile"
-                        className="w-32 h-32 rounded-full object-cover ring-2 ring-primary ring-offset-2 ring-offset-base-300"
+                        className="relative w-28 h-28 rounded-full object-cover border-4 border-base-300 shadow-xl"
                     />
+                    <div className="absolute bottom-1 right-2 w-5 h-5 bg-green-500 border-4 border-base-300 rounded-full shadow-sm"></div>
                 </div>
             </div>
 
-            <div className="text-center mt-4">
-                <div className="flex justify-center items-center gap-1">
-                    <h2 className="font-semibold text-lg capitalize">{firstName} {lastName}</h2>
-                    {/* Verified Badge (Using SVG instead of MdVerified) */}
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-blue-500">
-                        <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+            {/* --- USER INFO --- */}
+            <div className="text-center space-y-2">
+                <div className="flex justify-center items-center gap-1.5">
+                    <h2 className="font-bold text-xl text-white tracking-tight capitalize">
+                        {firstName} {lastName}
+                    </h2>
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-blue-400 drop-shadow-sm">
+                        <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397a4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549a4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
                     </svg>
                 </div>
 
-                <p className="text-sm text-base-content/70 mt-1 line-clamp-2 h-10 px-2">
-                    {about}
+                {/* SKILL TAGS */}
+                <div className="flex flex-wrap justify-center gap-1.5 py-1">
+                    {skills.slice(0, 3).map((skill, index) => (
+                        <span key={index} className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-white/5 border border-white/10 rounded-md text-primary">
+                            {skill}
+                        </span>
+                    ))}
+                </div>
+
+                <p className="text-xs text-base-content/60 leading-relaxed italic px-2">
+                    "{about || "No bio available..."}"
                 </p>
             </div>
 
-            <div className="mt-4 flex gap-3">
-    <button 
-        className="btn btn-outline btn-secondary flex-1 gap-2 group/btn"
-        onClick={() => handleSendRequest("ignored", _id)}
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-        Ignore
-    </button>
+            {/* --- ACTION BUTTONS --- */}
+            <div className="mt-8 flex items-center justify-between gap-4">
+                <button 
+                    className="flex-1 h-12 rounded-xl font-bold text-sm border border-white/10 bg-white/5 hover:bg-error/10 hover:text-error hover:border-error/20 transition-all flex items-center justify-center gap-2"
+                    onClick={() => handleSendRequest("ignored", _id)}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Pass
+                </button>
 
-    <button 
-        className="btn btn-primary flex-1 gap-2 group/btn"
-        onClick={() => handleSendRequest("interested", _id)}
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 group-hover/btn:scale-110 transition-transform">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v9m-4.5-4.5h9M3 20.25v-1.5a4.5 4.5 0 014.5-4.5h4.5a4.5 4.5 0 014.5 4.5v1.5m-1.5-12.75a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        Interested
-    </button>
-</div>
+                <button 
+                    className="flex-[2] h-12 rounded-xl font-bold text-sm bg-primary text-primary-content 
+                    hover:scale-105 active:scale-95 shadow-lg shadow-primary/20 transition-all flex items-center 
+                    justify-center gap-2 border-2 border-white hover:bg-secondary"
+                    onClick={() => handleSendRequest("interested", _id)}
+                >
+                    Interested
+                </button>
+            </div>
             
         </div>
     );
