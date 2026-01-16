@@ -70,14 +70,13 @@ authRouter.post("/login", async (req, res) => {
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "5d" });
 
       const isProd = process.env.NODE_ENV === "production";
-      
-      // Add the token to Cookie
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: isProd,
-        sameSite: isProd ? "None" : "Lax",
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
-      });
+
+  res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // Vercel uses HTTPS, so this must be true
+      sameSite: "None", // Required for cross-domain
+      expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+    });
 
       res.send(user);
       }
@@ -92,8 +91,11 @@ authRouter.post("/login", async (req, res) => {
 
 authRouter.post("/logout", async(req, res) => {
    res.cookie("token", null, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
     expires: new Date(Date.now()),
-   })
+  });
    res.send("Logout Successfully!!");
 })
 

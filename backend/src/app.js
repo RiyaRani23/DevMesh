@@ -8,13 +8,9 @@ require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const app = express();
 
 app.use(cors({
-    origin: [
-        "https://dev-mesh-frontend-url.vercel.app", // Your actual frontend Vercel URL
-        "http://localhost:5173" // For local testing
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    origin: "https://dev-mesh.vercel.app", // Your exact Frontend URL
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+    credentials: true // Required if you are using cookies/sessions
 }));
 
 app.use(express.json()); // Middleware to parse JSON bodies
