@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import { addConnection } from "../utils/connectionSlice";
-import connection from "../assets/connection.avif";
+
 
 const Connections = () => {
     const dispatch = useDispatch();
