@@ -63,12 +63,5 @@ profileRouter.delete("/deleteAccount", userAuth, async (req, res) => {
   }
 });
 
-// Change Password Route
-profileRouter.post("/changePassword", userAuth, async (req, res) => {
-  const { newPassword } = req.body;
-  req.user.password = await bcrypt.hash(newPassword, 10);
-  await req.user.save();
-  res.json({ message: "Password updated successfully" });
-});
 
 module.exports = profileRouter

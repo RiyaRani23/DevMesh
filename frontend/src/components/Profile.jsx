@@ -2,9 +2,15 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { DEFAULT_PHOTO_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { removeUser } from "../utils/userSlice";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
 const Profile = () => {
   const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   if (!user) {
     return (
@@ -19,10 +25,28 @@ const Profile = () => {
     );
   }
 
+  
+
   const { firstName, lastName, emailId, age, gender, about, photoUrl, skills = [] } = user;
   const displayPhotoUrl = photoUrl || DEFAULT_PHOTO_URL;
   const fullName = `${firstName || ""} ${lastName || ""}`.trim() || "User";
   const displayGender = gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : null;
+
+  const handleDeleteAccount = async () => {
+    const isConfirmed = window.confirm("Are you sure? This will permanently delete your account.");
+    if (!isConfirmed) return;
+
+    try {
+        await axios.delete(BASE_URL + "/deleteAccount", { withCredentials: true });
+        
+        // Clear Redux and redirect
+        dispatch(removeUser());
+        navigate("/signup");
+        alert("Account deleted.");
+    } catch (err) {
+        alert("Error deleting account: " + err.message);
+    }
+};
 
   return (
     <div className="min-h-screen bg-base-300/30 py-10 px-4 animate-in fade-in duration-700">
@@ -179,12 +203,22 @@ const Profile = () => {
                 </div>
               ))}
             </div>
-
-          </div>
+            <div className="mt-10 p-6 border border-error/20 rounded-3xl bg-error/5">
+          <h3 className="text-error font-bold mb-2">Danger Zone</h3>
+             <p className="text-xs opacity-60 mb-4">Permanently remove your account and all data from DevMesh.</p>
+            <button 
+          onClick={handleDeleteAccount}
+           className="btn btn-error btn-outline btn-sm rounded-xl"
+           >
+             Delete Account
+           </button>
         </div>
-      </div>
-    </div>
-  );
-};
+          </div>
+          </div>
+             </div>
+              </div>
+         );
+        };
 
 export default Profile;
+
