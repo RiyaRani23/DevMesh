@@ -62,8 +62,8 @@ userRouter.get("/feed", userAuth, async (req, res) => {
 
     // Pagination parameters
     const page = parseInt(req.query.page) || 1; // Default to page 1
-    let limit = parseInt(req.query.limit) || 10; // Number of users per page
-    limit = limit > 50 ? 50 : limit; // Maximum limit of users per page
+    let limit = parseInt(req.query.limit) || 30; // Number of users per page
+    limit = limit > 50 ? 50 : limit; 
     const skip = (page - 1) * limit; // Number of users to skip
 
     // Fetch all connection requests involving the logged-in user
@@ -86,6 +86,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       ],
     })
       .select(USER_SAFE_DATA)
+      .sort({ _id: 1 }); 
       .skip(skip)
       .limit(limit);
 
@@ -98,8 +99,8 @@ userRouter.get("/feed", userAuth, async (req, res) => {
 
     res.json({ data: shuffledUsers });
   } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+    res.status(400).send("Error: " + err.message);
+}
 });
 
 // Get all connection requests sent by LoggedIn user

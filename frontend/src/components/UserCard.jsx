@@ -28,7 +28,7 @@ const UserCard = ({ user }) => {
          min-h-[450px] border border-white/5 transition-all duration-500 hover:shadow-primary/20 hover:-translate-y-2">
             
             {/* --- GLOW EFFECT ON HOVER --- */}
-            <div className="absolute -top-20 -right-20 w-34 h-34 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors"></div>
+            <div className="absolute -top-20 -right-20 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors"></div>
 
             {/* --- PROFILE IMAGE --- */}
             <div className="relative flex justify-center mb-6">

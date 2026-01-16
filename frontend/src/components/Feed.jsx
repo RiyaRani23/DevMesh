@@ -13,6 +13,8 @@ const Feed = () => {
   const feed = useSelector((store) => store.feed);
   const searchTerm = useSelector((store) => store.search);
 
+  
+
   const getFeed = async () => {
     if (feed) return;
 
