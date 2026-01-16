@@ -42,3 +42,9 @@ connectDB()
     .catch((err) => {
         console.error("Database connection error:", err);
     });
+
+app.get("/", (req, res) => {
+    res.send("DevMesh Backend is running successfully!");
+});
+
+module.exports = app;
