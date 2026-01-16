@@ -7,12 +7,15 @@ require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true, 
-  })
-);
+app.use(cors({
+    origin: [
+        "https://dev-mesh-frontend-url.vercel.app", // Your actual frontend Vercel URL
+        "http://localhost:5173" // For local testing
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cookieParser()); // Middleware to parse cookies
