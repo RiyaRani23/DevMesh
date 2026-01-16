@@ -77,19 +77,19 @@ const Signup = () => {
                             {/* First Name */}
                             <div className="form-control">
                                 <label className="label font-bold text-xs uppercase opacity-70">First Name</label>
-                                <input name="firstName" type="text" placeholder="John" className="input input-bordered focus:border-primary transition-all bg-base-200/50" required onChange={handleChange} />
+                                <input name="firstName" type="text" placeholder="Derry" className="input input-bordered focus:border-primary transition-all bg-base-200/50" required onChange={handleChange} />
                             </div>
 
                             {/* Last Name */}
                             <div className="form-control">
                                 <label className="label font-bold text-xs uppercase opacity-70">Last Name</label>
-                                <input name="lastName" type="text" placeholder="Doe" className="input input-bordered focus:border-primary transition-all bg-base-200/50" onChange={handleChange} />
+                                <input name="lastName" type="text" placeholder="Smith" className="input input-bordered focus:border-primary transition-all bg-base-200/50" onChange={handleChange} />
                             </div>
 
                             {/* Email */}
                             <div className="form-control md:col-span-2">
                                 <label className="label font-bold text-xs uppercase opacity-70">Email ID</label>
-                                <input name="emailId" type="email" placeholder="john@devmesh.com" className="input input-bordered focus:border-primary transition-all bg-base-200/50" required onChange={handleChange} />
+                                <input name="emailId" type="email" placeholder="derry@gmail.com" className="input input-bordered focus:border-primary transition-all bg-base-200/50" required onChange={handleChange} />
                             </div>
 
                             {/* Photo URL */}

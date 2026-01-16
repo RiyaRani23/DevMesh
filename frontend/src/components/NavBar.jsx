@@ -39,7 +39,7 @@ const NavBar = () => {
       </span>
     </Link>
   </div>
-   { user && (
+   { user ? (
     <div className="flex items-center gap-4 mx-5">
     <div className="hidden md:block text-right">
       <p className="text-xs opacity-60 font-bold uppercase tracking-widest">Welcome</p>
@@ -84,6 +84,15 @@ const NavBar = () => {
       </ul>
     </div>
   </div>
+  ) : (
+        <div className="flex items-center gap-3 mx-5">
+          <Link to="/login" className="btn btn-ghost text-white font-bold">
+            Login
+          </Link>
+          <Link to="/signup" className="btn btn-primary font-bold px-6">
+            Signup
+          </Link>
+        </div>
 )}
 </div>
   )

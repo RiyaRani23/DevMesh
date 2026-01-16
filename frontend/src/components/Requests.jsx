@@ -87,7 +87,8 @@ const Requests = () => {
                   <div key={request._id} className="card card-side bg-base-100 shadow-sm mb-4 border border-base-300 hover:shadow-md transition-all">
                     <figure className="pl-4">
                       <div className="avatar">
-                        <div className="w-16 h-16 rounded-xl ring ring-primary ring-offset-base-100 ring-offset-2">
+                        <div className="w-16 h-16 rounded-xl ring ring-primary ring-offset-base-100 ring-offset-2 
+                        hover:scale-105 transition-all shadow-md">
                           <img src={request.fromUserId?.photoUrl} alt="profile" />
                         </div>
                       </div>
@@ -97,19 +98,21 @@ const Requests = () => {
                         {request.fromUserId?.firstName} {request.fromUserId?.lastName}
                       </h2>
                       <p className="text-xs opacity-70 line-clamp-1">{request.fromUserId?.about}</p>
-                      <div className="card-actions justify-end mt-2">
-                        <button 
-                          className="btn btn-primary btn-sm rounded-lg"
-                          onClick={() => reviewRequest("accepted", request._id)}
+                      <div className="card-actions justify-end mt-2 gap-3">
+                       <button className="btn btn-md border-none rounded-2xl px-8 bg-secondary text-white shadow-lg shadow-emerald-200/50 hover:bg-emerald-500
+                       hover:scale-105 hover:shadow-xl transition-all duration-300 ease-out"
+                       onClick={() => reviewRequest("accepted", request._id)}
                         >
-                          Accept
-                        </button>
-                        <button 
-                          className="btn btn-outline btn-error btn-sm rounded-lg"
-                          onClick={() => reviewRequest("rejected", request._id)}
-                        >
-                          Ignore
-                        </button>
+                      <span className="font-bold tracking-wide">Accept</span>
+                     </button>
+
+  
+                  <button
+                 className="btn btn-md btn-outline border-2 rounded-2xl px-8 bg-primary hover:bg-red-400 hover:scale-105 transition-all duration-300 ease-out"
+                 onClick={() => reviewRequest("rejected", request._id)}
+                >
+                   <span className="font-bold tracking-wide">Ignore</span>
+                 </button>
                       </div>
                     </div>
                   </div>
@@ -135,7 +138,7 @@ const Requests = () => {
                   <div key={request._id} className="flex items-center gap-4 bg-base-100 p-4 rounded-2xl shadow-sm mb-3 
                   border border-base-300">
                     <div className="avatar">
-                      <div className="w-12 h-12 rounded-full">
+                      <div className="w-12 h-12 rounded-full hover:scale-105 transition-all shadow-md">
                         <img src={request.toUserId?.photoUrl} alt="profile" />
                       </div>
                     </div>
@@ -143,10 +146,9 @@ const Requests = () => {
                       <h3 className="font-semibold hover:text-pink-400 hover:font-bold">{request.toUserId?.firstName} {request.toUserId?.lastName}</h3>
                       <p className="text-xs opacity-50 italic">Waiting for response...</p>
                     </div>
-                    <button className="btn btn-secondary btn-outline btn-sm rounded-full no-animation 
-                    pointer-events-none ">
-                      Pending
-                    </button>
+                   <button className="btn btn-sm rounded-full text-white bg-primary hover:bg-secondary transition-all duration-300 shadow-sm hover:shadow-pink-200">
+                   <span className="mr-1">⏳</span> Pending
+                  </button>
                   </div>
                 ))
               )}

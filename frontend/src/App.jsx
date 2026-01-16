@@ -9,6 +9,13 @@ import EditProfile from "./components/EditProfile";
 import Connections from "./components/Connection";
 import Requests from "./components/Requests";
 import Signup from "./components/SignUp";
+import Hero from "./components/Hero";
+import { useSelector } from "react-redux";
+
+const Home = () => {
+  const user = useSelector((store) => store.user);
+  return user ? <Feed /> : <Hero />;
+};
 
 function App() {
   return (
@@ -17,6 +24,7 @@ function App() {
     <BrowserRouter basename="/">
     <Routes>
        <Route path="/" element={<Body />}>
+       <Route index element={<Home />} />
        <Route path="/feed" element={<Feed />} />
        <Route path="/login" element={<Login />} />
        <Route path="/profile" element={<Profile />} />
