@@ -62,7 +62,7 @@ const Signup = () => {
         });
 
         dispatch(addUser(res.data.data)); 
-        navigate("/login");
+        navigate("/feed");
     } catch (err) {
         setError(err.response?.data?.message || err.response?.data || "Registration failed");
     } finally {
