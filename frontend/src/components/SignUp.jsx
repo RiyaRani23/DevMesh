@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { BASE_URL } from "../utils/constants";
-import background from "../assets/background.avif";
+import easy from "../assets/easy.avif";
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -80,7 +80,7 @@ const Signup = () => {
               <div 
                                  className="absolute inset-0 z-0"
                                  style={{
-                                   backgroundImage: `url(${background})`,
+                                   backgroundImage: `url(${easy})`,
                                    backgroundSize: 'cover',
                                    backgroundPosition: 'center',
                                    backgroundAttachment: 'fixed' 
