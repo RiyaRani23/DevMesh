@@ -7,11 +7,17 @@ require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 
-app.use(cors({
-    origin: "https://dev-mesh.vercel.app", // Your exact Frontend URL
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-    credentials: true // Required if you are using cookies/sessions
-}));
+app.use(
+  cors({
+    origin: [
+      "https://dev-mesh.vercel.app", // Your Production URL
+      "http://localhost:5173",       // Your Local Vite URL
+    ],
+    credentials: true,               // Allows cookies to be sent
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cookieParser()); // Middleware to parse cookies

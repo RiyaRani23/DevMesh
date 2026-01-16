@@ -6,52 +6,49 @@ const jwt = require("jsonwebtoken");
 
 const authRouter = express.Router();
 
+// --- Updated Signup Route ---
 authRouter.post("/signup", async (req, res) => {
-   try{
-    // Validate input data
-     validateSignUpData(req);
+  try {
+    validateSignUpData(req);
+    const { firstName, lastName, emailId, password, gender, about, photoUrl, age, skills } = req.body;
 
-     const { firstName, lastName, emailId, password, gender, about, photoUrl, age, skills }  = req.body;
-     
-    // Check if user already exists
     const existingUser = await User.findOne({ emailId: emailId.toLowerCase().trim() });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists please log in to continue" });
     }
 
-    // Encrpt the password
     const passwordHash = await bcrypt.hash(password, 10);
 
-     // Save user to the database
-      const user = new User({
-        firstName,
-        lastName,
-        emailId,
-        password: passwordHash,
-        gender,
-        about,
+    const user = new User({
+      firstName,
+      lastName,
+      emailId: emailId.toLowerCase().trim(), // Consistent lowercase
+      password: passwordHash,
+      gender,
+      about,
       ...(photoUrl && { photoUrl }),
-      ...(age && { age }),
+      ...(age && { age: Number(age) }), // Ensure it's a number
       ...(skills && skills.length > 0 && { skills }),
-      });
+    });
 
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
 
-       const savedUser = await user.save();
-       const token = await savedUser.getJWT();
+    // FIXED: Added production-ready cookie flags
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,      // Must be true for Vercel/HTTPS
+      sameSite: "None",  // Must be "None" for cross-domain cookies
+      expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+    });
 
-      res.cookie("token", token, {
-        expiry: new Date(Date.now() + 8 * 60 * 60 * 1000),
-      });
-
-       res.json({
-          message: "User added Successfully",
-          data: savedUser 
-});
-   }
-   catch(err){
-       res.status(400).send("Error creating user:" + err.message);
-   }
-  
+    res.json({
+      message: "User added Successfully",
+      data: savedUser 
+    });
+  } catch (err) {
+    res.status(400).send("Error creating user: " + err.message);
+  }
 });
 
 authRouter.post("/login", async (req, res) => {
