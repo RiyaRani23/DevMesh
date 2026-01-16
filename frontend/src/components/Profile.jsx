@@ -1,5 +1,6 @@
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DEFAULT_PHOTO_URL } from "../utils/constants";
 
 const Profile = () => {
@@ -100,29 +101,64 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="card bg-base-200 shadow-xl rounded-[2rem] border border-white/5 overflow-hidden">
-              <div className="card-body p-8">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="p-3 bg-secondary/10 rounded-2xl text-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
-                    </svg>
-                  </div>
-                  <h2 className="text-2xl font-bold">Tech Stack</h2>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {skills.length > 0 ? (
-                    skills.map((skill, index) => (
-                      <div key={index} className="px-6 py-2.5 bg-base-300 rounded-2xl border border-white/5 text-sm font-bold text-primary hover:bg-primary hover:text-white transition-all cursor-default shadow-sm active:scale-95">
-                        {skill}
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-base-content/50 italic">Add your skills to show off your expertise</p>
-                  )}
-                </div>
-              </div>
-            </div>
+           {/* Tech Stack Section */}
+<div className="card bg-base-200 shadow-xl rounded-[2rem] border border-white/5 overflow-hidden group">
+  <div className="card-body p-8">
+    <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center gap-4">
+        <div className="p-3 bg-secondary/10 rounded-2xl text-secondary group-hover:rotate-12 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold tracking-tight">Technical Expertise</h2>
+      </div>
+      <span className="badge badge-secondary badge-outline px-4 py-3 font-bold text-xs uppercase tracking-tighter">
+        {skills.length} Skills
+      </span>
+    </div>
+
+    <div className="flex flex-wrap gap-4">
+      {skills.length > 0 ? (
+        skills.map((skill, index) => (
+          <div 
+            key={index} 
+            className="group/skill relative px-6 py-3 bg-base-300 rounded-2xl border border-white/5 text-sm font-black text-secondary hover:text-white transition-all cursor-default shadow-lg hover:shadow-secondary/20 active:scale-95 overflow-hidden"
+          >
+            {/* Hover Background Fill Effect */}
+            <div className="absolute inset-0 bg-secondary translate-y-full group-hover/skill:translate-y-0 transition-transform duration-300 ease-out -z-0"></div>
+            
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary group-hover/skill:bg-white transition-colors"></span>
+              {skill}
+            </span>
+          </div>
+        ))
+      ) : (
+        <div className="w-full py-10 border-2 border-dashed border-base-content/10 rounded-[2rem] text-center">
+          <p className="text-base-content/40 italic">Your tech stack is currently empty.</p>
+          <Link to="/profile/edit" className="text-secondary font-bold hover:underline mt-2 inline-block">Add skills now</Link>
+        </div>
+      )}
+    </div>
+    
+    {/* Subtle Progress Bar Decoration */}
+    {skills.length > 0 && (
+      <div className="mt-8 pt-6 border-t border-white/5">
+         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-base-content/30 mb-2">
+            <span>Stack Completion</span>
+            <span>{Math.min(skills.length * 10, 100)}%</span>
+         </div>
+         <div className="w-full h-1.5 bg-base-300 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-secondary to-primary transition-all duration-1000" 
+              style={{ width: `${Math.min(skills.length * 10, 100)}%` }}
+            ></div>
+         </div>
+      </div>
+    )}
+  </div>
+</div>
 
             {/* Details Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

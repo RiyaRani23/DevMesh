@@ -46,22 +46,28 @@ const Signup = () => {
     };
 
     const handleSignup = async (e) => {
-        e.preventDefault();
-        setError("");
-        setIsLoading(true);
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
 
-        try {
-            const res = await axios.post(BASE_URL + "/signup", formData, {
-                withCredentials: true,
-            });
-            dispatch(addUser(res.data.data)); 
-            navigate("/feed");
-        } catch (err) {
-            setError(err.response?.data?.message || err.response?.data || "Registration failed");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    try {
+        const dataToSend = { 
+            ...formData, 
+            skills: skills 
+        };
+
+        const res = await axios.post(BASE_URL + "/signup", dataToSend, {
+            withCredentials: true,
+        });
+
+        dispatch(addUser(res.data.data)); 
+        navigate("/feed");
+    } catch (err) {
+        setError(err.response?.data?.message || err.response?.data || "Registration failed");
+    } finally {
+        setIsLoading(false);
+    }
+};
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -147,6 +153,7 @@ const Signup = () => {
                                 <input name="age" type="number" placeholder="25" className="input input-bordered focus:border-primary transition-all bg-base-200/50" onChange={handleChange} />
                             </div>
 
+                            {/* Tech (Skills) */}
                             <div className="form-control md:col-span-2">
                                 <label className="label font-bold text-xs uppercase opacity-70">
                                     Tech Stack (Skills)

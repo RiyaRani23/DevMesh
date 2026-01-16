@@ -7,8 +7,8 @@ const UserCard = ({ user }) => {
     const dispatch = useDispatch();
     if (!user) return null;
 
-    // Destructuring skills (assuming your schema has them, or showing a default)
-    const { _id, firstName, lastName, photoUrl, about, skills = ["React", "NodeJS"] } = user;
+    // Destructuring skills and providing a fallback if empty
+    const { _id, firstName, lastName, photoUrl, about, skills = [] } = user;
 
     const handleSendRequest = async (status, userId) => {
         try {
@@ -24,21 +24,11 @@ const UserCard = ({ user }) => {
     };
 
     return (
-        <div className="group relative w-80 bg-gradient-to-br from-base-300 to-base-100 shadow-2xl rounded-3xl p-6 overflow-hidden 
-        border border-white/5 transition-all duration-500 hover:shadow-primary/20 hover:-translate-y-2">
+        <div className="group relative w-88 bg-gradient-to-br from-base-300 to-base-100 shadow-2xl rounded-3xl p-8 overflow-hidden 
+         min-h-[450px] border border-white/5 transition-all duration-500 hover:shadow-primary/20 hover:-translate-y-2">
             
             {/* --- GLOW EFFECT ON HOVER --- */}
             <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors"></div>
-
-            {/* --- TOP ACTION: IGNORE (X) --- */}
-            <button 
-                className="btn btn-xs btn-circle btn-ghost absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => handleSendRequest("ignored", _id)}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
 
             {/* --- PROFILE IMAGE --- */}
             <div className="relative flex justify-center mb-6">
@@ -47,14 +37,14 @@ const UserCard = ({ user }) => {
                     <img
                         src={photoUrl || "https://via.placeholder.com/150"}
                         alt="Profile"
-                        className="relative w-28 h-28 rounded-full object-cover border-4 border-base-300 shadow-xl"
+                        className="relative w-32 h-32 rounded-full object-cover border-4 border-base-300 shadow-xl"
                     />
                     <div className="absolute bottom-1 right-2 w-5 h-5 bg-green-500 border-4 border-base-300 rounded-full shadow-sm"></div>
                 </div>
             </div>
 
             {/* --- USER INFO --- */}
-            <div className="text-center space-y-2">
+            <div className="text-center space-y-3">
                 <div className="flex justify-center items-center gap-1.5">
                     <h2 className="font-bold text-xl text-white tracking-tight capitalize">
                         {firstName} {lastName}
@@ -64,17 +54,24 @@ const UserCard = ({ user }) => {
                     </svg>
                 </div>
 
-                {/* SKILL TAGS */}
-                <div className="flex flex-wrap justify-center gap-1.5 py-1">
-                    {skills.slice(0, 3).map((skill, index) => (
-                        <span key={index} className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-white/5 border border-white/10 rounded-md text-primary">
-                            {skill}
-                        </span>
-                    ))}
+                {/* --- FULL TECH STACK --- */}
+                <div className="flex flex-wrap justify-center gap-2 min-h-[50px]">
+                    {skills.length > 0 ? (
+                        skills.map((skill, index) => (
+                            <span 
+                                key={index} 
+                                className="px-2.5 py-1 text-[11px] font-black uppercase tracking-wider bg-primary/10 border border-primary/20 rounded-lg text-primary shadow-sm hover:bg-primary hover:text-white transition-colors cursor-default"
+                            >
+                                {skill}
+                            </span>
+                        ))
+                    ) : (
+                        <span className="text-[10px] opacity-40 italic tracking-widest">Engineer</span>
+                    )}
                 </div>
 
-                <p className="text-xs text-base-content/60 leading-relaxed italic px-2">
-                    "{about || "No bio available..."}"
+                <p className="text-xs text-base-content/60 leading-relaxed italic px-2 line-clamp-2">
+                    "{about || "Developer Enthusiast"}"
                 </p>
             </div>
 
@@ -93,7 +90,7 @@ const UserCard = ({ user }) => {
                 <button 
                     className="flex-[2] h-12 rounded-xl font-bold text-sm bg-primary text-primary-content 
                     hover:scale-105 active:scale-95 shadow-lg shadow-primary/20 transition-all flex items-center 
-                    justify-center gap-2 border-2 border-white hover:bg-secondary"
+                    justify-center gap-2 border-2 border-white/10"
                     onClick={() => handleSendRequest("interested", _id)}
                 >
                     Interested

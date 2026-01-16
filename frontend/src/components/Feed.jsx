@@ -73,7 +73,7 @@ if (feed.length === 0) {
           No matching users found
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredFeed.slice(0, 6).map((user) => (
             <UserCard key={user._id} user={user} />
           ))}
