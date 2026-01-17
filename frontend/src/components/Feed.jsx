@@ -16,22 +16,23 @@ const Feed = () => {
   
 
   const getFeed = async () => {
-    if (feed) return;
+  if (feed && feed.length > 0) return; // Prevent unnecessary refetching
 
-    try {
-      const res = await axios.get(`${BASE_URL}/feed`, {
-        withCredentials: true,
-      });
+  try {
+    const res = await axios.get(`${BASE_URL}/feed`, {
+      withCredentials: true,
+    });
 
-      const feedData = Array.isArray(res.data)
-        ? res.data
-        : res.data.data;
+    // Ensure we always have an array, even if the API fails or is empty
+    const feedData = res?.data?.data || (Array.isArray(res?.data) ? res.data : []);
 
-      dispatch(addFeed(feedData));
-    } catch (err) {
-      console.error("Error while fetching feed", err);
-    }
-  };
+    dispatch(addFeed(feedData));
+  } catch (err) {
+    console.error("Error while fetching feed:", err);
+    // Dispatch an empty array so the UI doesn't stay in "Shimmer" mode forever
+    dispatch(addFeed([])); 
+  }
+};
 
   useEffect(() => {
     getFeed();
