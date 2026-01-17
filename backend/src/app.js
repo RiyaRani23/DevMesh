@@ -10,15 +10,27 @@ const app = express();
 // 1. Optimized CORS Configuration
 app.use(
   cors({
-    origin: ["https://dev-mesh.vercel.app", "http://localhost:5173"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "https://dev-mesh.vercel.app",
+        "http://localhost:5173",
+      ];
+
+      // allow requests with no origin (Postman, mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// 2. IMPORTANT: Handle Preflight globally
-app.options("*", cors()); 
 
 app.use(express.json());
 app.use(cookieParser());
