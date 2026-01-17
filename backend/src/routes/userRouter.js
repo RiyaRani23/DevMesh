@@ -86,7 +86,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       ],
     })
       .select(USER_SAFE_DATA)
-      .sort({ _id: 1 }); 
+      .sort({ _id: 1 })
       .skip(skip)
       .limit(limit);
 
