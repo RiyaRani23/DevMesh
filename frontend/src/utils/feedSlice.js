@@ -5,13 +5,9 @@ const feedSlice = createSlice({
     initialState: null,
     reducers: {
         addFeed: (state, action) => {
-  // If action.payload is the whole object { data: [...] }, extract the array
-  if (action.payload && action.payload.data) {
-     return action.payload.data;
-  }
-  // Otherwise, just return the payload (assuming it's already an array)
-  return action.payload;
-},
+    if (!state) return action.payload; // Initial load
+    return [...state, ...action.payload]; // Append new page data to existing list
+   },
         removeUser: (state, action) => {
             const newFeed = state.filter((user) => user._id !== action.payload)
             return newFeed;
