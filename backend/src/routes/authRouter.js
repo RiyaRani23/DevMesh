@@ -47,8 +47,18 @@ authRouter.post("/signup", async (req, res) => {
       data: savedUser 
     });
   } catch (err) {
-    res.status(400).send("Error creating user: " + err.message);
+  console.error("Signup error:", err);
+
+  // IMPORTANT: Always allow OPTIONS to succeed
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
   }
+
+  res.status(500).json({
+    message: err.message || "Internal Server Error"
+  });
+}
+
 });
 
 authRouter.post("/login", async (req, res) => {
