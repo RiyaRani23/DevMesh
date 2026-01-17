@@ -7,21 +7,23 @@ require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 
+// 1. Optimized CORS Configuration
 app.use(
   cors({
-    origin: [
-      "https://dev-mesh.vercel.app", // Your Production URL
-      "http://localhost:5173",       // Your Local Vite URL
-    ],
-    credentials: true,               // Allows cookies to be sent
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: ["https://dev-mesh.vercel.app", "http://localhost:5173"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.use(express.json()); // Middleware to parse JSON bodies
-app.use(cookieParser()); // Middleware to parse cookies
+// 2. IMPORTANT: Handle Preflight globally
+app.options("*", cors()); 
 
+app.use(express.json());
+app.use(cookieParser());
+
+// Routes
 const authRouter = require("./routes/authRouter");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
@@ -32,21 +34,16 @@ app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 
-// Connect to the database and start the server
+app.get("/", (req, res) => {
+  res.send("DevMesh Backend is running successfully!");
+});
 
 connectDB()
-    .then(() => {
-        console.log("Database connected successfully");
-        app.listen(3000, () => {
-        console.log("Server is running on port 3000");
-       });
-    })
-    .catch((err) => {
-        console.error("Database connection error:", err);
-    });
-
-app.get("/", (req, res) => {
-    res.send("DevMesh Backend is running successfully!");
-});
+  .then(() => {
+    console.log("Database connected successfully");
+  })
+  .catch((err) => {
+    console.error("Database connection error:", err);
+  });
 
 module.exports = app;
