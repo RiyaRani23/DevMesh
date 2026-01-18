@@ -14,6 +14,7 @@ app.use(
       const allowedOrigins = [
         "https://dev-mesh.vercel.app",
         "http://localhost:5173",
+        /\.vercel\.app$/
       ];
 
       // allow requests with no origin (Postman, mobile apps)
