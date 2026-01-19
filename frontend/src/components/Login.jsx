@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
-import axios from "axios";
+// import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { BASE_URL } from "../utils/constants";
 import BG from "../assets/BG.avif";
+import api from "../api/api";
 
 const Login = () => {
     const [emailId, setEmailId] = useState("");
@@ -28,7 +29,7 @@ const Login = () => {
         if (!emailId || !password) return setError("All fields are required");
         setIsLoading(true);
         try {
-            const res = await axios.post(BASE_URL + "/login", { emailId, password }, { withCredentials: true });
+            const res = await api.post(BASE_URL + "/login", { emailId, password }, { withCredentials: true });
             dispatch(addUser(res.data));
             navigate("/feed");
         } catch(err){

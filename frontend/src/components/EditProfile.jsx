@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from "../api/api";
 
 import { BASE_URL, DEFAULT_PHOTO_URL } from '../utils/constants';
 import { addUser } from '../utils/userSlice';
@@ -72,7 +72,7 @@ const EditProfile = () => {
                 skills: skills
             };
 
-            const res = await axios.patch(`${BASE_URL}/profile/edit`, updateData, { withCredentials: true });
+            const res = await api.patch(`${BASE_URL}/profile/edit`, updateData, { withCredentials: true });
             dispatch(addUser(res?.data?.user || res?.data));
             setShowToast(true);
             setTimeout(() => { setShowToast(false); navigate('/profile'); }, 2000);

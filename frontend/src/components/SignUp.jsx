@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
-import axios from "axios";
+import api from "../api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
@@ -57,7 +57,7 @@ const Signup = () => {
             skills: skills 
         };
 
-        const res = await axios.post(BASE_URL + "/signup", dataToSend, {
+        const res = await api.post(BASE_URL + "/signup", dataToSend, {
             withCredentials: true,
         });
 

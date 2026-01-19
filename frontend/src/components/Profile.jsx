@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { DEFAULT_PHOTO_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../utils/userSlice";
-import axios from "axios";
+import api from "../api/api";
 import { BASE_URL } from "../utils/constants";
 
 const Profile = () => {
@@ -37,7 +36,7 @@ const Profile = () => {
     if (!isConfirmed) return;
 
     try {
-        await axios.delete(BASE_URL + "/deleteAccount", { withCredentials: true });
+        await api.delete(BASE_URL + "/deleteAccount", { withCredentials: true });
         
         // Clear Redux and redirect
         dispatch(removeUser());

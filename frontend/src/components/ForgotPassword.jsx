@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/api";
 import { BASE_URL } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +13,7 @@ const ForgotPassword = () => {
     const handleReset = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(BASE_URL + "/forgotPassword", {
+            const res = await api.post(BASE_URL + "/forgotPassword", {
                 email, // Matches your backend { email, newPassword }
                 newPassword 
             });

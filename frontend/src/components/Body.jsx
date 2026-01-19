@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
-import axios from "axios";
+import api from "../api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -21,7 +21,7 @@ const fetchUser = async () => {
         if(['/login', '/signup'].includes(location.pathname)) return;
         
         try{
-            const res = await axios.get(`${BASE_URL}/profile/view`, {
+            const res = await api.get(`${BASE_URL}/profile/view`, {
                 withCredentials: true
             });
             dispatch(addUser(res.data));

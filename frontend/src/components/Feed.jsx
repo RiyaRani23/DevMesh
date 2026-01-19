@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import api from "../api/api";
 
 import { BASE_URL } from "../utils/constants";
 import { addFeed } from "../utils/feedSlice";
@@ -19,7 +19,7 @@ const Feed = () => {
   if (feed && feed.length > 0) return; // Prevent unnecessary refetching
 
   try {
-    const res = await axios.get(`${BASE_URL}/feed`, {
+    const res = await api.get(`${BASE_URL}/feed`, {
       withCredentials: true,
     });
 
