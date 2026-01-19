@@ -2,7 +2,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 // Middleware to authenticate user using JWT token
 const userAuth = async (req, res, next) => {
@@ -28,6 +28,8 @@ const userAuth = async (req, res, next) => {
     res.status(401).send("Unauthorized : " + err.message);
   }
 };
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
 
 module.exports = {
   userAuth,

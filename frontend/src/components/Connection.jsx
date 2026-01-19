@@ -1,7 +1,7 @@
 import api from "../api/api";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../utils/constants";
+//import { BASE_URL } from "../utils/constants";
 import { addConnection } from "../utils/connectionSlice";
 
 
@@ -11,7 +11,7 @@ const Connections = () => {
 
     const fetchConnections = async () => {
         try {
-            const res = await api.get(BASE_URL + "/user/connections", {
+            const res = await api.get("/user/connections", {
                 withCredentials: true,
             });
             dispatch(addConnection(res?.data?.data));

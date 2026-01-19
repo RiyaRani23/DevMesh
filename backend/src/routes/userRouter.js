@@ -42,12 +42,16 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
       .populate("fromUserId", USER_SAFE_DATA)
       .populate("toUserId", USER_SAFE_DATA);
 
-    const data = connectionRequests.map((row) => {
-      if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
-        return row.toUserId;
-      }
-      return row.fromUserId;
-    });
+    const data = connectionRequests
+  .map((row) => {
+    // 🔐 safety check for deleted users
+    if (!row.fromUserId || !row.toUserId) return null;
+
+    return row.fromUserId._id.toString() === loggedInUser._id.toString()
+      ? row.toUserId
+      : row.fromUserId;
+  })
+  .filter(Boolean); // remove null entries
 
     res.json({ data });
   } catch (err) {
